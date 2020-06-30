@@ -23,12 +23,14 @@ package com.amaze.filemanager.asynchronous.asynctasks;
 import java.lang.ref.WeakReference;
 import java.util.regex.Pattern;
 
+import com.amaze.filemanager.activities.MainActivity;
 import com.amaze.filemanager.filesystem.HybridFile;
 import com.amaze.filemanager.filesystem.HybridFileParcelable;
 import com.amaze.filemanager.fragments.SearchWorkerFragment;
 import com.amaze.filemanager.utils.OpenMode;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -57,6 +59,7 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
     rootMode = root;
     isRegexEnabled = regex;
     isMatchesEnabled = matches;
+    activity.get().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
   }
 
   @Override
@@ -66,8 +69,11 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
      * method in case they are invoked after the Activity's and
      * Fragment's onDestroy() method have been called.
      */
+
     if (callbacks != null) {
       callbacks.onPreExecute(input);
+
+
     }
   }
 
@@ -96,8 +102,10 @@ public class SearchAsyncTask extends AsyncTask<String, HybridFileParcelable, Voi
 
   @Override
   public void onPostExecute(Void c) {
+
     if (callbacks != null) {
       callbacks.onPostExecute(input);
+      activity.get().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
   }
 
